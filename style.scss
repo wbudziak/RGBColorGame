@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(237, 237, 237);
+}
+header{
+    width: 100%;
+    height: 100px;
+    background-color: rgb(128, 128, 128);
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    color: white;
+}
+.color-container{
+    height: 400px;
+    max-width: 600px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(2,1fr);
+    grid-gap: 10px;
+    &__box{
+        cursor: pointer;
+        border-radius: 9px;
+    }
+}
