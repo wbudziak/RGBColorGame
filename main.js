@@ -1,47 +1,62 @@
-const colorContainer = document.querySelector('.color-container');
-const easyMode = document.querySelector('.easy');
-const hardMode = document.querySelector('.hard');
-const rgb = document.querySelector('.rgb');
-const header = document.querySelector('header');
+const colorContainer = document.querySelector('.container__middle');
+const easyMode = document.querySelector('.button--easy');
+const hardMode = document.querySelector('.button--hard');
+const reset = document.querySelector('.button--reset');
+const buttons = document.querySelectorAll('.button');
+const rgb = document.querySelector('.container__rgb');
+const msgSpan = document.querySelector('.container__msg-text');
 
-let howManyTiles = 6;
+let howManyTiles = 3;
 let randomColors = [];
 let tiles = [];
 let timeToAnimation = 50;
 
 const resetData = () => {
     timeToAnimation = 50;
+    easyMode.style.backgroundColor = "rgb(121, 205, 79)";
+    hardMode.style.backgroundColor = "rgb(241, 65, 51)";
+    reset.style.backgroundColor = "rgb(14, 105, 242)";
     colorContainer.innerHTML = "";
+    msgSpan.textContent = "";
     randomColors = [];
-    // header.style.backgroundColor = "rgb(198, 195, 195)";
     createTile();
 }
 
 easyMode.addEventListener('click', () => {
+    easyMode.style.opacity = "1";
+    hardMode.style.opacity = "0.3";
+    colorContainer.style.gridTemplateRows = "repeat(1, 1fr)";
     howManyTiles = 3;
     resetData();
 })
 
 hardMode.addEventListener('click', () => {
+    hardMode.style.opacity = "1";
+    easyMode.style.opacity = "0.3";
+    colorContainer.style.gridTemplateRows = "repeat(2, 1fr)";
     howManyTiles = 6;
     resetData();
 })
 
-const checkResult = (randomID, randomTile2) => {
-    tiles = [...document.querySelectorAll(".color-container__box")];
+reset.addEventListener('click', resetData);
+
+const checkResult = (randomID, secretColor) => {
+    tiles = [...document.querySelectorAll(".container__color-tile")];
     tiles.forEach(tile => {
         tile.addEventListener('click', () => {
-            if (tile.style.backgroundColor === randomTile2) {
-                alert("zgadłeś!");
+            if (tile.style.backgroundColor === secretColor) {
+                msgSpan.textContent = "Good job!";
                 tiles.forEach(tile => {
-                    tile.style.backgroundColor = randomTile2;
+                    tile.style.backgroundColor = secretColor;
+                    tile.style.opacity = "1";
                 });
-                // header.style.backgroundColor = randomTile2;
-                setTimeout(() => {
-                    resetData();
-                }, 1000);
+                buttons.forEach(button => {
+                    button.style.backgroundColor = secretColor;
+                });
             } else {
-                alert("zgadnij ponownie!");
+                msgSpan.textContent = "Try again!";
+                tile.style.opacity = "0";
+                tile.style.cursor = "unset";
             }
         })
     });
@@ -49,9 +64,9 @@ const checkResult = (randomID, randomTile2) => {
 
 const randomTile = () => {
     const randomID = Math.floor(Math.random() * randomColors.length);
-    const randomTile2 = randomColors[randomID];
-    rgb.textContent = randomTile2;
-    checkResult(randomID, randomTile2);
+    const secretColor = randomColors[randomID];
+    rgb.textContent = secretColor;
+    checkResult(randomID, secretColor);
 }
 
 const createTile = () => {
@@ -60,6 +75,7 @@ const createTile = () => {
         setTimeout(() => {
             tile.style.opacity = "1";
         }, timeToAnimation);
+
         let randomColor1 = Math.floor(Math.random() * 255);
         let randomColor2 = Math.floor(Math.random() * 255);
         let randomColor3 = Math.floor(Math.random() * 255);
@@ -67,7 +83,7 @@ const createTile = () => {
 
         const tile = document.createElement('div');
         tile.style.backgroundColor = color;
-        tile.className = "color-container__box";
+        tile.className = "container__color-tile";
         colorContainer.appendChild(tile);
 
         randomColors.push(color);
